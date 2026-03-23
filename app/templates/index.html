@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cats vs Dogs - Vote!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #a0a0b0;
+            margin-bottom: 50px;
+        }
+
+        .vote-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+
+        .vote-btn {
+            padding: 20px 50px;
+            font-size: 1.4rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .vote-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .btn-cats {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .btn-dogs {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+        }
+
+        .results {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .results h2 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #c0c0d0;
+            letter-spacing: 1px;
+        }
+
+        .result-row {
+            margin-bottom: 20px;
+        }
+
+        .result-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .bar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 50px;
+            height: 22px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 50px;
+            transition: width 0.6s ease;
+            min-width: 4px;
+        }
+
+        .bar-cats {
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+        }
+
+        .bar-dogs {
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+        }
+
+        .total {
+            margin-top: 20px;
+            color: #a0a0b0;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐱 vs 🐶</h1>
+        <p class="subtitle">Cast your vote. The internet decides.</p>
+
+        <form action="/vote" method="POST">
+            <div class="vote-buttons">
+                <button class="vote-btn btn-cats" name="vote" value="Cats">🐱 Cats</button>
+                <button class="vote-btn btn-dogs" name="vote" value="Dogs">🐶 Dogs</button>
+            </div>
+        </form>
+
+        <div class="results">
+            <h2>LIVE RESULTS</h2>
+
+            {% set total = results['Cats'] + results['Dogs'] %}
+
+            <div class="result-row">
+                <div class="result-label">
+                    <span>🐱 Cats</span>
+                    <span>{{ results['Cats'] }} votes</span>
+                </div>
+                <div class="bar-track">
+                    <div class="bar-fill bar-cats"
+                         style="width: {{ (results['Cats'] / total * 100) if total > 0 else 0 }}%">
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-row">
+                <div class="result-label">
+                    <span>🐶 Dogs</span>
+                    <span>{{ results['Dogs'] }} votes</span>
+                </div>
+                <div class="bar-track">
+                    <div class="bar-fill bar-dogs"
+                         style="width: {{ (results['Dogs'] / total * 100) if total > 0 else 0 }}%">
+                    </div>
+                </div>
+            </div>
+
+            <p class="total">Total votes cast: {{ total }}</p>
+        </div>
+    </div>
+</body>
+</html>
